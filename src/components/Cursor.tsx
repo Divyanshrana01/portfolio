@@ -4,48 +4,75 @@ import gsap from "gsap";
 
 const Cursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
     let hover = false;
-    const cursor = cursorRef.current!;
+    let frame = 0;
     const mousePos = { x: 0, y: 0 };
     const cursorPos = { x: 0, y: 0 };
-    document.addEventListener("mousemove", (e) => {
+
+    // quickSetter writes the transform directly. The previous version built a
+    // fresh gsap.to() tween on every animation frame for the life of the page.
+    const setX = gsap.quickSetter(cursor, "x", "px");
+    const setY = gsap.quickSetter(cursor, "y", "px");
+
+    const onMouseMove = (e: MouseEvent) => {
       mousePos.x = e.clientX;
       mousePos.y = e.clientY;
-    });
-    requestAnimationFrame(function loop() {
+    };
+
+    const loop = () => {
       if (!hover) {
         const delay = 6;
         cursorPos.x += (mousePos.x - cursorPos.x) / delay;
         cursorPos.y += (mousePos.y - cursorPos.y) / delay;
-        gsap.to(cursor, { x: cursorPos.x, y: cursorPos.y, duration: 0.1 });
-        // cursor.style.transform = `translate(${cursorPos.x}px, ${cursorPos.y}px)`;
+        setX(cursorPos.x);
+        setY(cursorPos.y);
       }
-      requestAnimationFrame(loop);
-    });
-    document.querySelectorAll("[data-cursor]").forEach((item) => {
-      const element = item as HTMLElement;
-      element.addEventListener("mouseover", (e: MouseEvent) => {
-        const target = e.currentTarget as HTMLElement;
+      frame = requestAnimationFrame(loop);
+    };
+
+    // Delegated so elements rendered after mount are covered too; the previous
+    // version only bound whatever existed at mount.
+    const onOver = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+        "[data-cursor]"
+      );
+      if (!target) return;
+
+      if (target.dataset.cursor === "icons") {
         const rect = target.getBoundingClientRect();
+        cursor.classList.add("cursor-icons");
+        setX(rect.left);
+        setY(rect.top);
+        cursor.style.setProperty("--cursorH", `${rect.height}px`);
+        hover = true;
+      }
+      if (target.dataset.cursor === "disable") {
+        cursor.classList.add("cursor-disable");
+      }
+    };
 
-        if (element.dataset.cursor === "icons") {
-          cursor.classList.add("cursor-icons");
+    const onOut = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement | null)?.closest("[data-cursor]")) return;
+      cursor.classList.remove("cursor-disable", "cursor-icons");
+      hover = false;
+    };
 
-          gsap.to(cursor, { x: rect.left, y: rect.top, duration: 0.1 });
-          //   cursor.style.transform = `translate(${rect.left}px,${rect.top}px)`;
-          cursor.style.setProperty("--cursorH", `${rect.height}px`);
-          hover = true;
-        }
-        if (element.dataset.cursor === "disable") {
-          cursor.classList.add("cursor-disable");
-        }
-      });
-      element.addEventListener("mouseout", () => {
-        cursor.classList.remove("cursor-disable", "cursor-icons");
-        hover = false;
-      });
-    });
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseover", onOver);
+    document.addEventListener("mouseout", onOut);
+    frame = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseover", onOver);
+      document.removeEventListener("mouseout", onOut);
+    };
   }, []);
 
   return <div className="cursor-main" ref={cursorRef}></div>;

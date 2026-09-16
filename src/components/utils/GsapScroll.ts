@@ -128,6 +128,10 @@ export function setCharTimeline(
 }
 
 export function setAllTimeline() {
+  // Career is not currently rendered. Without this guard GSAP logs a "target
+  // not found" warning for every selector below, on load and on every resize.
+  if (!document.querySelector(".career-section")) return;
+
   const careerTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: ".career-section",

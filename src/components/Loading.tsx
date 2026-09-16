@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./styles/Loading.css";
 import { useLoading } from "../context/LoadingProvider";
 
@@ -9,29 +9,52 @@ const Loading = ({ percent }: { percent: number }) => {
   const [loaded, setLoaded] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const sequenced = useRef(false);
 
-  if (percent >= 100) {
-    setTimeout(() => {
-      setLoaded(true);
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 1000);
-    }, 600);
-  }
+  // The marquee re-measures itself on every render, which made each tick of the
+  // percentage counter cost far more than the tick itself. Holding one element
+  // keeps it out of the counter's re-renders.
+  const marquee = useMemo(
+    () => (
+      <Marquee>
+        <span> A Creative Developer</span> <span>A Creative Designer</span>
+        <span> A Creative Developer</span> <span>A Creative Designer</span>
+      </Marquee>
+    ),
+    []
+  );
 
   useEffect(() => {
-    import("./utils/initialFX").then((module) => {
-      if (isLoaded) {
-        setClicked(true);
-        setTimeout(() => {
-          if (module.initialFX) {
-            module.initialFX();
-          }
-          setIsLoading(false);
-        }, 900);
-      }
-    });
-  }, [isLoaded]);
+    if (percent < 100 || sequenced.current) return;
+    sequenced.current = true;
+
+    const timers: number[] = [];
+    timers.push(
+      window.setTimeout(() => {
+        setLoaded(true);
+        timers.push(window.setTimeout(() => setIsLoaded(true), 700));
+      }, 400)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, [percent]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    setClicked(true);
+
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      const module = await import("./utils/initialFX");
+      if (cancelled) return;
+      module.initialFX?.();
+      setIsLoading(false);
+    }, 700);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [isLoaded, setIsLoading]);
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const { currentTarget: target } = e;
@@ -60,12 +83,7 @@ const Loading = ({ percent }: { percent: number }) => {
         </div>
       </div>
       <div className="loading-screen">
-        <div className="loading-marquee">
-          <Marquee>
-            <span> A Creative Developer</span> <span>A Creative Designer</span>
-            <span> A Creative Developer</span> <span>A Creative Designer</span>
-          </Marquee>
-        </div>
+        <div className="loading-marquee">{marquee}</div>
         <div
           className={`loading-wrap ${clicked && "loading-clicked"}`}
           onMouseMove={(e) => handleMouseMove(e)}
@@ -92,44 +110,60 @@ const Loading = ({ percent }: { percent: number }) => {
 
 export default Loading;
 
+// The counter is driven by requestAnimationFrame and only pushes state when the
+// whole number changes, so it costs one render per visible step instead of one
+// every 2ms. It eases toward 90 while the model is still downloading and only
+// runs to 100 once the work is genuinely finished.
 export const setProgress = (setLoading: (value: number) => void) => {
-  let percent: number = 0;
+  let percent = 0;
+  let frame = 0;
+  let settled = false;
 
-  let interval = setInterval(() => {
-    if (percent <= 50) {
-      let rand = Math.round(Math.random() * 5);
-      percent = percent + rand;
+  const push = (value: number) => {
+    if (value !== percent) {
+      percent = value;
       setLoading(percent);
-    } else {
-      clearInterval(interval);
-      interval = setInterval(() => {
-        percent = percent + Math.round(Math.random());
-        setLoading(percent);
-        if (percent > 91) {
-          clearInterval(interval);
-        }
-      }, 2000);
     }
-  }, 100);
+  };
 
-  function clear() {
-    clearInterval(interval);
-    setLoading(100);
-  }
+  const startedAt = performance.now();
+  const creep = (now: number) => {
+    if (settled) return;
+    const elapsed = now - startedAt;
+    push(Math.min(90, Math.round(90 * (1 - Math.exp(-elapsed / 1100)))));
+    frame = requestAnimationFrame(creep);
+  };
+  frame = requestAnimationFrame(creep);
+
+  const stop = () => {
+    settled = true;
+    cancelAnimationFrame(frame);
+  };
 
   function loaded() {
     return new Promise<number>((resolve) => {
-      clearInterval(interval);
-      interval = setInterval(() => {
-        if (percent < 100) {
-          percent++;
-          setLoading(percent);
+      stop();
+      const from = percent;
+      const startRun = performance.now();
+      const duration = 420;
+
+      const run = (now: number) => {
+        const t = Math.min(1, (now - startRun) / duration);
+        push(Math.round(from + (100 - from) * t));
+        if (t < 1) {
+          frame = requestAnimationFrame(run);
         } else {
-          resolve(percent);
-          clearInterval(interval);
+          resolve(100);
         }
-      }, 2);
+      };
+      frame = requestAnimationFrame(run);
     });
   }
+
+  function clear() {
+    stop();
+    push(100);
+  }
+
   return { loaded, percent, clear };
 };

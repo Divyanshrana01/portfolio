@@ -304,7 +304,10 @@
   top: 0;
 }
 h2.landing-info-h2 {
-  color: #c481ff;
+  /* The echo layer sits behind the white headline and swaps words with it.
+     At full strength both words read at once, so it is carried at low alpha.
+     Alpha rather than opacity because initialFX animates opacity to 1. */
+  color: rgba(196, 129, 255, 0.34);
   font-size: 42px;
   width: 120%;
   margin: 0;
