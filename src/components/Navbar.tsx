@@ -1,80 +1,74 @@
 import { useEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import HoverLinks from "./HoverLinks";
 import "./styles/Navbar.css";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 export let smoother: ScrollSmoother;
+
+const links = [
+  { href: "#about", label: "About" },
+  { href: "#work", label: "Work" },
+  { href: "#contact", label: "Contact" },
+];
 
 const Navbar = () => {
   useEffect(() => {
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
+      smooth: 1.2,
+      speed: 1.25,
       effects: true,
       autoResize: true,
       ignoreMobileResize: true,
     });
 
-    smoother.scrollTop(0);
-    smoother.paused(true);
+    // The bar is transparent over the hero and gains a ground once the page
+    // scrolls under it, so it never sits on top of unrelated content.
+    const trigger = ScrollTrigger.create({
+      start: 80,
+      end: "max",
+      onToggle: (self) =>
+        document.querySelector(".header")?.classList.toggle("header-set", self.isActive),
+    });
 
-    let links = document.querySelectorAll(".header ul a");
-    links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
-      element.addEventListener("click", (e) => {
-        if (window.innerWidth > 1024) {
-          e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
-        }
-      });
-    });
-    window.addEventListener("resize", () => {
-      ScrollSmoother.refresh(true);
-    });
+    const onResize = () => ScrollSmoother.refresh(true);
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      trigger.kill();
+      smoother?.kill();
+    };
   }, []);
-  return (
-    <>
-      <div className="header">
-        <a href="/#" className="navbar-title" data-cursor="disable">
-          Divyansh Rana
-        </a>
-        <a
-          href="mailto:divyanshr141@gmail.com"
-          className="navbar-connect"
-          data-cursor="disable"
-        >
-          divyanshr141@gmail.com
-        </a>
-        <ul>
-          <li>
-            <a data-href="#about" href="#about">
-              <HoverLinks text="ABOUT" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#work" href="#work">
-              <HoverLinks text="WORK" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#contact" href="#contact">
-              <HoverLinks text="CONTACT" />
-            </a>
-          </li>
-        </ul>
-      </div>
 
-      <div className="landing-circle1"></div>
-      <div className="landing-circle2"></div>
-      <div className="nav-fade"></div>
-    </>
+  const onNavClick = (href: string) => (e: React.MouseEvent) => {
+    if (window.innerWidth > 1024 && smoother) {
+      e.preventDefault();
+      smoother.scrollTo(href, true, "top top");
+    }
+  };
+
+  return (
+    <div className="header">
+      <a href="/#" className="navbar-title" data-cursor="disable">
+        Divyansh Rana
+      </a>
+      <nav>
+        <ul>
+          {links.map((l) => (
+            <li key={l.href}>
+              <a href={l.href} data-href={l.href} onClick={onNavClick(l.href)}>
+                <HoverLinks text={l.label} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
   );
 };
 

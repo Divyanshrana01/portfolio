@@ -1,12 +1,20 @@
-# Divyansh Rana | Portfolio 🚀
+# Divyansh Rana | Portfolio
 
-Personal portfolio of **Divyansh Rana**, an MSc Artificial Intelligence student and aspiring AI, Machine Learning and Generative AI engineer. It features an interactive 3D avatar, smooth scroll driven animations, and sections for about, skills, projects and contact.
+Personal portfolio of **Divyansh Rana**, who builds retrieval and agent systems
+and measures whether they work.
 
-## 🛠️ Tech Stack
+The page is laid out as an evaluation report: a hero trace panel showing the
+KubePilot pipeline, a table of measured runs (including one regression), then
+the projects those numbers came from.
 
-React • TypeScript • Vite • GSAP (ScrollSmoother, ScrollTrigger, SplitText) • Three.js • WebGL • react fast marquee
+Every figure on the site is a published run from the repository it belongs to.
+Tools are only listed where they appear in a public repo.
 
-## ⚙️ Run it locally
+## Tech stack
+
+React · TypeScript · Vite · GSAP (ScrollSmoother, ScrollTrigger)
+
+## Run it locally
 
 ```bash
 npm install
@@ -22,19 +30,26 @@ npm run build
 npm run preview
 ```
 
-## ✏️ Customising the content
+## Where the content lives
 
-* **Projects:** `src/data/projects.ts`
-* **About bio:** `src/components/About.tsx`
-* **Skills (What I Do):** `src/components/WhatIDo.tsx`
-* **Tech stack logos:** `src/components/TechStack.tsx` (logo files in `public/logos`)
-* **Contact and social links:** `src/components/Contact.tsx` and `src/components/SocialIcons.tsx`
-* **Page title, meta and social preview image:** `index.html` and `public/og.png`
+| Content | File |
+| --- | --- |
+| Projects, metrics and stacks | `src/data/projects.ts` |
+| Hero headline and trace panel | `src/components/Landing.tsx` |
+| Bio | `src/components/About.tsx` |
+| Measured results table | `src/components/Evidence.tsx` |
+| Tools and capabilities | `src/components/Practice.tsx` |
+| Education | `src/components/Career.tsx` |
+| Contact and social links | `src/components/Contact.tsx` |
+| Design tokens (colour, type, spacing) | `src/index.css` |
+| Page title, meta and social preview | `index.html` and `public/og.png` |
 
-## 🙏 Credits
+## Credits
 
-Built on the portfolio template created by **Moncy Yohannan**. Please keep this credit and review the `LICENSE` file before reusing.
+Originally scaffolded from the portfolio template created by
+**Moncy Yohannan**. The design, layout, copy and most components have since
+been rewritten, but the template's credit is retained as its terms ask.
 
-## 📄 License
+## License
 
-Licensed under the Personal Portfolio License (PPL) v1.0. See the `LICENSE` file for full details.
+Licensed under the Personal Portfolio License (PPL) v1.0.

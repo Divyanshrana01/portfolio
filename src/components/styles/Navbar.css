@@ -1,89 +1,60 @@
 .header {
-  display: flex;
-  max-width: var(--cMaxWidth);
-  width: var(--cWidth);
-  justify-content: space-between;
-  padding: 20px 0px;
-  margin-bottom: -100px;
-  box-sizing: border-box;
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 9999;
-  /* The empty space between the logo/email/nav-links must not swallow clicks
-     meant for content underneath (e.g. sections that scroll flush to the top). */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.1rem max(4vw, 1rem);
+  /* Only the bar's own children take clicks; the gaps between them must not
+     swallow clicks meant for the page scrolling underneath. */
   pointer-events: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border-bottom: 1px solid transparent;
 }
+
 .header > * {
   pointer-events: auto;
 }
-.header ul {
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  column-gap: 40px;
-  row-gap: 8px;
-  align-items: end;
+
+.header-set {
+  background-color: rgba(237, 239, 242, 0.86);
+  backdrop-filter: blur(10px);
+  border-bottom-color: var(--rule);
 }
-.header ul li {
-  margin-left: 0px;
-  letter-spacing: 1px;
-  color: #ccc;
-  font-weight: 600;
-  cursor: pointer;
-}
-.navbar-connect {
-  position: absolute;
-  display: none;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 15px;
-  letter-spacing: 1px;
-  font-weight: 500;
-}
+
 .navbar-title {
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+  font-size: 0.98rem;
+  font-variation-settings: "wght" 600;
+  letter-spacing: -0.01em;
 }
-@media only screen and (min-width: 500px) {
+
+.header nav ul {
+  display: flex;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.header nav a {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  transition: color 0.2s ease;
+}
+
+.header nav a:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 560px) {
   .header {
-    padding: 20px 0px;
-  }
-  .header ul {
-    flex-direction: row;
-    align-items: center;
-    font-size: 14px;
-  }
-  .header ul li {
-    color: #eae5ec;
+    padding-inline: 1rem;
   }
   .navbar-title {
-    font-size: 16px;
+    font-size: 0.9rem;
   }
-}
-@media only screen and (min-width: 900px) {
-  .navbar-connect {
-    display: block;
-  }
-}
-@media only screen and (min-width: 1200px) {
-  .header {
-    padding: 35px 0px;
-  }
-  .header ul {
-    column-gap: 80px;
-    font-size: 16px;
-  }
-  .navbar-connect {
-    font-size: 16px;
-  }
-  .navbar-title {
-    font-size: 18px;
+  .header nav a {
+    font-size: 0.85rem;
   }
 }

@@ -1,0 +1,129 @@
+.evidence-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.evidence-table th {
+  text-align: left;
+  font-size: 0.76rem;
+  font-variation-settings: "wght" 500;
+  color: var(--ink-faint);
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--ink);
+  white-space: nowrap;
+}
+
+.evidence-table td {
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: baseline;
+}
+
+.evidence-table .num {
+  text-align: right;
+  width: 7.5rem;
+  padding-right: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.evidence-table th:last-child {
+  padding-left: 1.5rem;
+}
+
+.ev-system {
+  font-variation-settings: "wght" 560;
+  white-space: nowrap;
+  padding-right: 1.5rem;
+}
+
+.ev-before {
+  color: var(--ink-faint);
+}
+
+/* The result is the only place the accent appears in this table, so the eye
+   lands on the delta rather than on the chrome. */
+.ev-after {
+  color: var(--signal);
+  font-weight: 500;
+}
+
+.ev-set {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  padding-left: 1.5rem;
+}
+
+.is-regression .ev-after {
+  color: #9a3412;
+}
+
+.is-regression .ev-system,
+.is-regression td {
+  color: var(--ink-soft);
+}
+
+.evidence-note {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 62ch;
+  border-left: 2px solid #9a3412;
+  padding-left: 1rem;
+}
+
+@media (max-width: 760px) {
+  .evidence-table,
+  .evidence-table tbody,
+  .evidence-table tr,
+  .evidence-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .evidence-table thead {
+    display: none;
+  }
+
+  .evidence-table tr {
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .evidence-table td {
+    padding: 0;
+    border: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    text-align: right;
+  }
+
+  .evidence-table td::before {
+    content: attr(data-label);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  .evidence-table .num {
+    width: auto;
+  }
+
+  .ev-system {
+    font-size: 1.05rem;
+    padding-right: 0;
+    margin-bottom: 0.4rem;
+  }
+
+  .ev-system::before {
+    display: none;
+  }
+
+  .ev-set {
+    padding-left: 0;
+    margin-top: 0.3rem;
+  }
+}
