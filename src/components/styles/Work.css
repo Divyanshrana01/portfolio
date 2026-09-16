@@ -1,101 +1,256 @@
-.work-list {
-  display: grid;
+.work-section h2 {
+  margin-top: 100px;
+  font-size: 70px;
+  font-weight: 500;
+  margin-bottom: 0;
 }
-
-.work-entry {
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
-  gap: clamp(1.5rem, 5vw, 4.5rem);
-  padding-block: clamp(2.2rem, 4vw, 3.2rem);
-  border-top: 1px solid var(--rule);
+.work-section h2 > span {
+  color: var(--accentColor);
 }
-
-.work-entry:first-child {
-  border-top: 0;
-  padding-top: 0;
+.work-section {
+  transition: 0s;
+  box-sizing: border-box;
+  padding-bottom: 100px;
 }
-
-.work-ident h3 {
-  font-size: clamp(1.3rem, 2.1vw, 1.7rem);
-  font-variation-settings: "wdth" 110, "wght" 600;
-  letter-spacing: -0.02em;
-  line-height: 1.12;
-}
-
-.work-kind {
-  margin-top: 0.4rem;
-  font-size: 0.85rem;
-  color: var(--ink-faint);
-}
-
-.work-repo {
-  display: inline-block;
-  margin-top: 1rem;
-  font-size: 0.88rem;
-}
-
-.work-summary {
-  font-size: clamp(1.08rem, 1.5vw, 1.25rem);
-  line-height: 1.4;
-  font-variation-settings: "wght" 500;
-  letter-spacing: -0.012em;
-  max-width: 44ch;
-}
-
-.work-detail {
-  margin-top: 0.85rem;
-  color: var(--ink-soft);
-  font-size: 1rem;
-}
-
-/* Metrics sit on their own rule so they read as a readout, not as prose. */
-.work-metrics {
+.work-container {
+  margin: auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: 2.4rem;
-  margin-top: 1.6rem;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--rule-soft);
+  flex-direction: column;
+  align-content: stretch;
 }
-
-.work-metric dt {
-  font-size: 0.76rem;
-  color: var(--ink-faint);
-  margin-bottom: 0.25rem;
+.work-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
 }
-
-.work-metric dd {
+.work-nav {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.work-nav-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid #363636;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.work-nav-btn:hover:not(:disabled) {
+  background: var(--accentColor);
+  border-color: var(--accentColor);
+  color: #0b080c;
+}
+.work-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.work-flex {
+  width: 100%;
+  display: flex;
+  margin-left: -80px;
+  padding-right: 120px;
+  padding-top: 60px;
+  position: relative;
+  overflow: visible;
+}
+.work-box {
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  box-sizing: border-box;
+  border-right: 1px solid #363636;
+  flex-shrink: 0;
+  gap: 50px;
+  justify-content: start;
+}
+.work-flex .work-box:nth-child(even) {
+  flex-direction: column-reverse;
+}
+.work-flex::before,
+.work-flex::after {
+  content: "";
+  width: calc(50000vw);
+  height: 1px;
+  background-color: #363636;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+.work-flex::after {
+  top: 100%;
+}
+.work-title {
+  justify-content: space-between;
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.work-title > div {
+  text-align: right;
+}
+.work-title h3 {
+  font-size: 50px;
+  line-height: 50px;
   margin: 0;
-  font-size: 1.32rem;
-  color: var(--signal);
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
+  font-weight: 600;
 }
 
-.work-stack {
+.work-info h4 {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+}
+.work-info p {
+  font-weight: 200;
+  color: #adacac;
+  margin: 0;
+  margin-top: 3px;
+}
+.work-info > p {
+  width: 90%;
+}
+.work-info .work-desc {
+  color: #d5d5d5;
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+.work-image {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 0.45rem;
-  margin-top: 1.4rem;
+  width: 100%;
+  justify-content: center;
+}
+.work-image-in {
+  position: relative;
+  overflow: hidden;
+}
+.work-image-in img {
+  transition: transform 0.6s ease;
+}
+.work-image-in:hover img {
+  transform: scale(1.045);
+}
+.work-link {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: var(--backgroundColor);
+  width: 50px;
+  border-radius: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.5),
+    inset 0px 0px 10px 0px #393939;
+  transition: 0.3s;
+  opacity: 0;
+}
+.work-image a:hover {
+  color: inherit;
+}
+.work-image a:hover .work-link {
+  opacity: 1;
+}
+.work-image video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  object-fit: cover;
+}
+.work-image img {
+  max-width: 100%;
+  max-height: 350px;
+}
+@media only screen and (max-height: 900px) {
+  .work-image img {
+    max-height: 250px;
+  }
+  .work-box {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .work-section h2 {
+    font-size: 60px;
+    margin-bottom: 30px;
+    margin-top: 70px;
+  }
+}
+@media only screen and (max-width: 1400px) {
+  .work-title h3 {
+    font-size: 35px;
+  }
+  .work-info p {
+    font-size: 13px;
+  }
+  .work-info h4 {
+    font-size: 15px;
+  }
+  .work-box {
+    width: 450px;
+    padding: 50px;
+  }
+  .work-flex {
+    margin-left: -50px;
+    padding-right: 75px;
+  }
+  .work-section h2 {
+    font-size: 50px;
+  }
+}
+@media only screen and (max-width: 1400px) {
+  .work-box {
+    width: 350px;
+    padding: 30px;
+  }
+  .work-flex {
+    margin-left: -30px;
+    padding-right: 45px;
+  }
 }
 
-.work-stack li {
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  padding: 0.2rem 0.68rem;
+@media only screen and (max-height: 650px) {
+  .work-image img {
+    max-height: 200px;
+  }
+  .work-section h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  .work-box {
+    gap: 20px;
+  }
 }
-
-@media (max-width: 900px) {
-  .work-entry {
-    grid-template-columns: 1fr;
-    gap: 1.1rem;
+/* @media only screen and (max-width: 900px) {
+  .work-image img {
+    max-height: 200px;
   }
-  .work-metrics {
-    gap: 1.6rem;
+  .work-section h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
   }
-  .work-metric dd {
-    font-size: 1.15rem;
+  .work-box {
+    gap: 20px;
+  }
+} */
+@media only screen and (max-width: 1025px) {
+  .work-container {
+    align-content: normal;
+  }
+  .work-flex {
+    height: auto;
   }
 }

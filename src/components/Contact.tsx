@@ -1,58 +1,58 @@
+import { MdArrowOutward, MdCopyright } from "react-icons/md";
 import "./styles/Contact.css";
 
-const Contact = () => (
-  <footer className="contact-section" id="contact">
-    <div className="shell contact-inner">
-      <div className="contact-lead">
-        <h2>
-          If you are hiring for retrieval, agents or evaluation, I would like to
-          talk.
-        </h2>
-        <a className="contact-email" href="mailto:divyanshr141@gmail.com">
-          divyanshr141@gmail.com
-        </a>
-      </div>
-
-      <div className="contact-meta">
-        <div className="contact-block">
-          <h3>Elsewhere</h3>
-          <ul>
-            <li>
-              <a
-                href="https://github.com/Divyanshrana01"
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub
+const Contact = () => {
+  return (
+    <div className="contact-section section-container" id="contact">
+      <div className="contact-container">
+        <h3>Contact</h3>
+        <div className="contact-flex">
+          <div className="contact-box">
+            <h4>Email</h4>
+            <p>
+              <a href="mailto:divyanshr141@gmail.com" data-cursor="disable">
+                divyanshr141@gmail.com
               </a>
-            </li>
-            <li>
-              <a
-                href="https://www.linkedin.com/in/divyanshrana991"
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div className="contact-block">
-          <h3>Availability</h3>
-          <p>
-            Open to AI and ML engineering roles in the UK. Student visa, and
-            eligible for the Graduate Route.
-          </p>
+            </p>
+          </div>
+          <div className="contact-box">
+            <h4>Availability</h4>
+            <p className="contact-availability">
+              <span className="badge-dot"></span>
+              Open to AI, ML &amp; GenAI roles in the UK
+            </p>
+          </div>
+          <div className="contact-box">
+            <h4>Social</h4>
+            <a
+              href="https://github.com/Divyanshrana01"
+              target="_blank"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              Github <MdArrowOutward />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/divyanshrana991"
+              target="_blank"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              Linkedin <MdArrowOutward />
+            </a>
+          </div>
+          <div className="contact-box">
+            <h2>
+              Designed &amp; Developed <br /> by <span>Divyansh Rana</span>
+            </h2>
+            <h5>
+              <MdCopyright /> 2026
+            </h5>
+          </div>
         </div>
       </div>
-
-      <p className="contact-fine">
-        <span>Divyansh Rana</span>
-        <span>Built and designed in the open</span>
-      </p>
     </div>
-  </footer>
-);
+  );
+};
 
 export default Contact;

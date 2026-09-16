@@ -27,5 +27,3 @@ dist-ssr
 
 backup/
 .env
-# build info
-*.tsbuildinfo
